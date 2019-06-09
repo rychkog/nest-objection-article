@@ -7,12 +7,24 @@
     "build": "tsc -p tsconfig.build.json",
     "start": "ts-node src/main",
     "prestart:prod": "npm run build",
-    "start:prod": "node dist/main.js"
+    "start:prod": "node dist/main.js",
+    "knex": "knex --knexfile knexfile.ts",
+    "migrate": "npm run knex migrate:latest",
+    "migrate:make": "npm run knex migrate:make -- -x ts",
+    "seed": "npm run knex seed:run",
+    "seed:make": "npm run knex seed:make -- -x ts",
+    "run:pg-docker": "docker run -it --rm --name pg-docker -e POSTGRES_PASSWORD=docker -p 5432:5432 postgres:10",
+    "stop:pg-docker": "docker kill pg-docker"
   },
   "dependencies": {
     "@nestjs/common": "6.2.4",
     "@nestjs/core": "6.2.4",
     "@nestjs/platform-express": "6.2.4",
+    "@types/dotenv": "^6.1.1",
+    "dotenv": "^8.0.0",
+    "knex": "^0.17.5",
+    "objection": "^1.6.9",
+    "pg": "^7.11.0",
     "reflect-metadata": "0.1.13",
     "rxjs": "6.5.2",
     "typescript": "3.5.1"

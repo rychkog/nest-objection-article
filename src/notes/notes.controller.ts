@@ -1,22 +1,20 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { NoteModel } from '../database/models/note.model';
 import { NotesService } from './notes.service';
 
 @Controller('notes')
 export class NotesController {
-  constructor(
-    private notesService: NotesService
-  ) {
-  }
+  constructor(private notesService: NotesService) {}
 
   @Get()
   async findAll() {
-    return this.notesService.findAll();
+    return this.notesService.findAll().eager('[tags]');
   }
 
   @Get(':id')
   async findOne(@Param('id', new ParseIntPipe()) id: number) {
     const note = await this.notesService.findOne(id);
+    await note.$loadRelated('[tags,theme]');
     return note;
   }
 
@@ -33,33 +31,28 @@ export class NotesController {
   @Put(':id')
   async edit(@Param('id', new ParseIntPipe()) id: number, @Body('text') text: string) {
     const note = await this.notesService.update(id, { text });
+    await note.$loadRelated('[tags,theme]');
     return note;
   }
 
   @Put(':id/tags/:tagId')
-  async addTag(
-    @Param('id', new ParseIntPipe()) id: number,
-    @Param('tagId', new ParseIntPipe()) tagId: number,
-  ) {
+  async addTag(@Param('id', new ParseIntPipe()) id: number, @Param('tagId', new ParseIntPipe()) tagId: number) {
     const note = await this.notesService.addTag(id, tagId);
+    await note.$loadRelated('[tags,theme]');
     return note;
   }
 
   @Delete(':id/tags/:tagId')
-  async removeTag(
-    @Param('id', new ParseIntPipe()) id: number,
-    @Param('tagId', new ParseIntPipe()) tagId: number,
-  ) {
+  async removeTag(@Param('id', new ParseIntPipe()) id: number, @Param('tagId', new ParseIntPipe()) tagId: number) {
     const note = await this.notesService.removeTag(id, tagId);
+    await note.$loadRelated('[tags,theme]');
     return note;
   }
 
   @Put(':id/theme/:themeId')
-  async setTheme(
-    @Param('id', new ParseIntPipe()) id: number,
-    @Param('themeId', new ParseIntPipe()) themeId: number,
-  ) {
+  async setTheme(@Param('id', new ParseIntPipe()) id: number, @Param('themeId', new ParseIntPipe()) themeId: number) {
     const note = await this.notesService.update(id, { themeId });
+    await note.$loadRelated('[tags,theme]');
     return note;
   }
 }

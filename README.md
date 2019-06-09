@@ -1,13 +1,25 @@
 # Reducing mental fatigue: NestJS + Objection.js
 
+This is a companion repository for my article.
+
+Practical part of this article shows how to use NestJS with Objection.js ORM.
+There I've developed a toy API, which purpose is to show concepts I've described.
+
+## Prerequisites
+
 ## Hot to run
+
 - `npm i`
+- `npm run run:pg-docker`
+- `npm run migrate && npm run seed`
 - `npm run start`
 
 API is accessible at `http://localhost:3001`
 
 ## Example API requests
+
 ### Themes
+
 ```bash
 # findAll
 curl http://localhost:3001/api/themes
@@ -26,6 +38,7 @@ curl -X DELETE http://localhost:3001/api/themes/6
 ```
 
 ### Tags
+
 ```bash
 # findAll
 curl http://localhost:3001/api/tags
@@ -44,6 +57,7 @@ curl -X DELETE http://localhost:3001/api/tags/6
 ```
 
 ### Notes
+
 ```bash
 # findAll
 curl http://localhost:3001/api/notes
